@@ -1,0 +1,319 @@
+openapi: 3.1.0
+info:
+  title: DripStack API
+  version: 1.0.0
+  description: |
+    DripStack is a micropayment layer that lets AI agents access premium Substack 
+    content by paying writers directly in USDC on Solana via MPP on Tempo.
+  contact:
+    url: https://dripstack.com
+
+servers:
+  - url: https://dripstack.com/api
+    description: Production
+
+tags:
+  - name: content
+    description: Search and access premium Substack content
+  - name: wallet
+    description: Wallet and payment operations
+  - name: writers
+    description: Writer onboarding and management
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [content]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /search:
+    get:
+      operationId: searchContent
+      tags: [content]
+      summary: Search premium Substack articles
+      description: Search for premium Substack articles by topic or question. Returns articles with pricing info.
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Search query or question
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 5
+            minimum: 1
+            maximum: 20
+          description: Number of results to return
+        - name: author
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by author name
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResults"
+        "400":
+          description: Invalid query
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /access:
+    post:
+      operationId: accessArticle
+      tags: [content]
+      summary: Access a premium article
+      description: |
+        Pay for and access a premium Substack article. 
+        Requires a funded Solana wallet and MPP payment signature.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ArticleAccessInput"
+      responses:
+        "200":
+          description: Article content delivered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArticleAccess"
+        "402":
+          description: Payment required or insufficient balance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Article not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /balance:
+    get:
+      operationId: getBalance
+      tags: [wallet]
+      summary: Get wallet balance
+      parameters:
+        - name: wallet
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Solana wallet address
+      responses:
+        "200":
+          description: Wallet balance info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WalletBalance"
+        "404":
+          description: Wallet not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /writers/connect:
+    post:
+      operationId: connectWriter
+      tags: [writers]
+      summary: Connect a Substack as a writer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WriterInput"
+      responses:
+        "201":
+          description: Writer connected
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Writer"
+        "400":
+          description: Invalid Substack URL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Already connected
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /writers/{writerId}/stats:
+    get:
+      operationId: getWriterStats
+      tags: [writers]
+      summary: Get writer earnings and stats
+      parameters:
+        - name: writerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Writer stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WriterStats"
+        "404":
+          description: Writer not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+
+    Article:
+      type: object
+      required: [id, title, author, publication, excerpt, price_usdc, paywall]
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        author:
+          type: string
+        publication:
+          type: string
+        excerpt:
+          type: string
+        price_usdc:
+          type: number
+        paywall:
+          type: boolean
+
+    SearchResults:
+      type: object
+      required: [results, total]
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Article"
+        total:
+          type: integer
+
+    ArticleAccessInput:
+      type: object
+      required: [article_id, wallet_address]
+      properties:
+        article_id:
+          type: string
+        wallet_address:
+          type: string
+          description: Solana wallet address
+
+    ArticleAccess:
+      type: object
+      required: [content, author, payment_tx, amount_usdc]
+      properties:
+        content:
+          type: string
+          description: Full article content
+        author:
+          type: string
+        payment_tx:
+          type: string
+          description: Solana transaction signature
+        amount_usdc:
+          type: number
+
+    WalletBalance:
+      type: object
+      required: [wallet, balance_usdc, total_spent, articles_accessed]
+      properties:
+        wallet:
+          type: string
+        balance_usdc:
+          type: number
+        total_spent:
+          type: number
+        articles_accessed:
+          type: integer
+
+    WriterInput:
+      type: object
+      required: [substack_url, wallet_address, price_usdc]
+      properties:
+        substack_url:
+          type: string
+          description: Full Substack URL (e.g. https://yourname.substack.com)
+        wallet_address:
+          type: string
+          description: Solana wallet to receive payments
+        price_usdc:
+          type: number
+          description: Price per article in USDC
+
+    Writer:
+      type: object
+      required: [id, substack_url, wallet_address, price_usdc, active]
+      properties:
+        id:
+          type: string
+        substack_url:
+          type: string
+        wallet_address:
+          type: string
+        price_usdc:
+          type: number
+        active:
+          type: boolean
+
+    WriterStats:
+      type: object
+      required: [writer_id, total_earned_usdc, articles_sold, pending_payout_usdc]
+      properties:
+        writer_id:
+          type: string
+        total_earned_usdc:
+          type: number
+        articles_sold:
+          type: integer
+        pending_payout_usdc:
+          type: number
