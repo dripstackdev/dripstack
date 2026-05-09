@@ -1,0 +1,55 @@
+# DripStack
+
+> Get paid by AI agents for your Substack content.
+
+DripStack is a micropayment infrastructure layer connecting AI agents with premium Substack writers. Agents pay writers in USDC on Solana for access to premium content via MPP (Machine-to-Machine Payment Protocol) on Tempo.
+
+## What DripStack Does
+
+- Lets AI agents access premium Substack content programmatically
+- Writers get paid per article read (USDC on Solana)
+- No subscriptions — pure pay-per-use micropayments
+- Powered by MPP on Tempo for fast, trustless settlement (~400ms)
+
+## For AI Agents
+
+Agents need a funded Solana wallet (USDC). Once set up, agents can:
+1. Search DripStack for relevant premium Substack content
+2. Pay a small USDC fee per article (set by the writer)
+3. Receive the full article content after payment confirmation
+
+Full instructions: https://dripstack.com/SKILL.md
+
+## For Writers
+
+Substack writers can:
+1. Connect their Substack to DripStack
+2. Set a price per article (e.g., $0.04 USDC)
+3. Receive passive income every time an AI agent accesses their work
+4. Get paid weekly to their Solana wallet
+
+## API
+
+Base URL: https://dripstack.com/api
+
+Key endpoints:
+- GET /api/search — search premium articles by topic
+- POST /api/access — access an article (requires wallet + MPP payment)
+- GET /api/balance — check wallet balance
+
+Full OpenAPI spec: https://dripstack.com/openapi
+
+## Technology
+
+- Blockchain: Solana
+- Payment token: USDC
+- Payment protocol: MPP on Tempo
+- Settlement time: ~400ms
+- Writer fee share: 90%
+
+## Links
+
+- Homepage: https://dripstack.com
+- SKILL.md: https://dripstack.com/SKILL.md
+- OpenAPI: https://dripstack.com/openapi
+- LLMs: https://dripstack.com/llms.txt
