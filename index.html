@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Get paid by AI agents for your Substack content." />
+  <meta property="og:title" content="DripStack" />
+  <meta property="og:description" content="Get paid by AI agents for your Substack content." />
+  <meta property="og:url" content="https://dripstack.com" />
+  <title>DripStack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--black:#0d0d0d;--grey-dark:#3a3a3a;--grey-mid:#888;--grey-light:#d4d4d4;--grey-border:#e2e2e2;--grey-bg:#f7f7f7;--white:#ffffff}
+    html{scroll-behavior:smooth}
+    body{background:var(--white);color:var(--black);font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+    header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--grey-border);position:sticky;top:0;background:rgba(255,255,255,0.97);backdrop-filter:blur(8px);z-index:100}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+    .logo-icon{width:28px;height:28px;border:1.5px solid var(--black);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:700;flex-shrink:0}
+    .logo-text{font-family:'Playfair Display',serif;font-weight:600;font-size:17px;letter-spacing:-0.2px}
+    .try-btn{background:var(--black);color:var(--white);border:none;padding:8px 18px;font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;transition:background .15s;text-decoration:none;letter-spacing:.03em}
+    .try-btn:hover{background:var(--grey-dark)}
+    .tabs{display:flex;border-bottom:1px solid var(--grey-border);padding:0 24px;background:var(--white);overflow-x:auto}
+    .tab{padding:13px 0;margin-right:28px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--grey-mid);cursor:pointer;border:none;background:none;border-bottom:1.5px solid transparent;margin-bottom:-1px;transition:all .15s;white-space:nowrap;letter-spacing:.03em}
+    .tab.active{color:var(--black);border-bottom-color:var(--black)}
+    .tab:hover{color:var(--black)}
+    .hero{padding:56px 24px 40px;max-width:720px}
+    .hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--grey-mid);letter-spacing:.06em;margin-bottom:20px}
+    .hero h1{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(26px,5.5vw,44px);line-height:1.18;letter-spacing:-.5px;margin-bottom:32px}
+    .hero h1 em{font-style:italic;font-weight:400}
+    .quotes-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--grey-mid);letter-spacing:.06em;margin-bottom:10px}
+    .quotes-wrapper{display:flex;align-items:flex-start;gap:10px;margin-bottom:40px}
+    .quote-arrow{font-family:'IBM Plex Mono',monospace;font-size:16px;color:var(--grey-light);flex-shrink:0;margin-top:1px}
+    .quote-text{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:var(--grey-dark);line-height:1.55;animation:fadeIn .4s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+    .hr{border:none;border-top:1px solid var(--grey-border)}
+    .chat-outer{padding:48px 24px 56px;max-width:720px}
+    .chat-heading{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(20px,4vw,32px);line-height:1.2;letter-spacing:-.3px;margin-bottom:8px}
+    .chat-heading em{font-style:italic;font-weight:400}
+    .chat-sub{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--grey-mid);margin-bottom:24px;letter-spacing:.04em}
+    .chat-box{border:1px solid var(--grey-border)}
+    .chat-messages{padding:20px;min-height:160px;display:flex;flex-direction:column;gap:14px}
+    .msg{display:flex;gap:12px;align-items:flex-start;animation:fadeIn .3s ease}
+    .msg.user{flex-direction:row-reverse}
+    .msg-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--grey-mid);flex-shrink:0;padding-top:3px;letter-spacing:.04em;min-width:28px;text-align:right}
+    .msg.user .msg-label{text-align:left}
+    .msg-bubble{max-width:82%;font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;line-height:1.6;color:var(--grey-dark)}
+    .msg.user .msg-bubble{color:var(--black);font-weight:500;border-left:2px solid var(--black);padding-left:10px}
+    .typing{display:flex;gap:4px;align-items:center;padding:2px 0}
+    .typing span{width:5px;height:5px;border-radius:50%;background:var(--grey-light);animation:bounce 1.2s infinite}
+    .typing span:nth-child(2){animation-delay:.2s}
+    .typing span:nth-child(3){animation-delay:.4s}
+    @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-4px)}}
+    .chat-input-area{border-top:1px solid var(--grey-border);display:flex;align-items:stretch}
+    .chat-input{flex:1;border:none;padding:14px 16px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;color:var(--black);outline:none;resize:none;min-height:48px;max-height:120px;background:var(--white);line-height:1.5}
+    .chat-input::placeholder{color:var(--grey-light);font-style:italic}
+    .chat-send{background:var(--black);border:none;padding:0 18px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s;color:var(--white);flex-shrink:0}
+    .chat-send:hover{background:var(--grey-dark)}
+    .chat-send:disabled{background:var(--grey-light);cursor:not-allowed}
+    .steps-outer{padding:0 24px 64px;max-width:720px}
+    .step{border-top:1px solid var(--grey-border);padding:36px 0}
+    .step:last-child{border-bottom:1px solid var(--grey-border)}
+    .step-head{display:flex;gap:20px;align-items:baseline;margin-bottom:12px}
+    .step-num{font-family:'Playfair Display',serif;font-weight:600;font-size:13px;color:var(--grey-light);flex-shrink:0;width:20px}
+    .step h2{font-family:'Playfair Display',serif;font-weight:600;font-size:18px;letter-spacing:-.2px;line-height:1.3}
+    .step-body{padding-left:40px}
+    .step-body p{font-size:14px;color:var(--grey-dark);margin-bottom:16px;line-height:1.65}
+    .wallet-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+    .pill{border:1px solid var(--grey-border);padding:5px 14px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;cursor:pointer;transition:all .15s;background:var(--white);color:var(--grey-dark)}
+    .pill:hover,.pill.active{border-color:var(--black);color:var(--black);background:var(--grey-bg)}
+    .code-block{background:var(--grey-bg);border:1px solid var(--grey-border);margin-bottom:4px}
+    .code-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--grey-border)}
+    .code-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--grey-mid);letter-spacing:.06em}
+    .copy-btn{background:none;border:1px solid var(--grey-border);padding:3px 10px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--grey-mid);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s}
+    .copy-btn:hover{color:var(--black);border-color:var(--grey-dark)}
+    .copy-btn.copied{color:var(--black);border-color:var(--black)}
+    .code-body{padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.7;color:var(--grey-dark);overflow-x:auto;white-space:pre-wrap;word-break:break-all}
+    .powered{padding:32px 24px 48px;border-top:1px solid var(--grey-border)}
+    .powered p{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--grey-mid);letter-spacing:.05em;margin-bottom:16px}
+    .scan-badges{display:flex;gap:8px;flex-wrap:wrap}
+    .scan-badge{border:1px solid var(--grey-border);padding:5px 12px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--grey-mid);text-decoration:none;display:flex;align-items:center;gap:6px;transition:all .15s}
+    .scan-badge:hover{border-color:var(--black);color:var(--black)}
+    .live-dot{width:5px;height:5px;border-radius:50%;background:var(--black);opacity:.4;animation:blink 2s infinite}
+    @keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
+    footer{border-top:1px solid var(--grey-border);padding:20px 24px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
+    .footer-links{display:flex;flex-wrap:wrap}
+    .footer-links a{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--grey-mid);text-decoration:none;padding:2px 12px;border-right:1px solid var(--grey-border);transition:color .15s}
+    .footer-links a:first-child{padding-left:0}
+    .footer-links a:last-child{border-right:none}
+    .footer-links a:hover{color:var(--black)}
+    .footer-scans{display:flex;gap:8px;flex-wrap:wrap}
+    .footer-scan{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--grey-mid);text-decoration:none;transition:color .15s}
+    .footer-scan:hover{color:var(--black)}
+    .fade-up{opacity:0;transform:translateY(14px);animation:fadeUp .5s ease forwards}
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+    .d1{animation-delay:.05s}.d2{animation-delay:.15s}.d3{animation-delay:.25s}.d4{animation-delay:.38s}
+    @media(max-width:480px){
+      header{padding:14px 16px}
+      .hero{padding:40px 16px 28px}
+      .chat-outer{padding:36px 16px 40px}
+      .steps-outer{padding:0 16px 48px}
+      .powered{padding:28px 16px 36px}
+      footer{padding:18px 16px}
+      .step-body{padding-left:28px}
+      .footer-links a{font-size:10.5px;padding:2px 8px}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">
+    <div class="logo-icon">D</div>
+    <span class="logo-text">DripStack</span>
+  </a>
+  <a class="try-btn" href="#chat">Try it</a>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab(this,'agents')">For Writers</button>
+  <button class="tab" onclick="switchTab(this,'writers')">For Agents</button>
+</div>
+
+<section class="hero">
+  <p class="hero-eyebrow fade-up d1">Premium financial insights, summarized every week.</p>
+  <h1 class="fade-up d2">The best writers are on Substack. <em>Now let your agent access their work.</em></h1>
+  <p class="quotes-label fade-up d3">Things you can say</p>
+  <div class="quotes-wrapper fade-up d3">
+    <span class="quote-arrow">›</span>
+    <p class="quote-text" id="quoteText"></p>
+  </div>
+</section>
+
+<hr class="hr" />
+
+<div class="chat-outer fade-up d4" id="chat">
+  <h2 class="chat-heading">Ask premium financial writers anything. <em>We'll find the answer and pay the source.</em></h2>
+  <p class="chat-sub">Powered by MPP on Tempo and x402 on Base</p>
+  <div class="chat-box">
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg ai">
+        <span class="msg-label">ds</span>
+        <div class="msg-bubble">Ask a financial question and I'll fetch the answer from premium Substack writers, paying them directly.</div>
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <textarea class="chat-input" id="chatInput" placeholder="Ask premium financial writers anything…" rows="1" onkeydown="handleKey(event)"></textarea>
+      <button class="chat-send" id="sendBtn" onclick="sendMessage()" title="Send">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="steps-outer" id="agentsSection">
+  <div class="step">
+    <div class="step-head">
+      <span class="step-num">1.</span>
+      <h2>Set up and fund a wallet</h2>
+    </div>
+    <div class="step-body">
+      <p>Your agent needs a crypto wallet funded with USDC to pay for paid article access. Choose a wallet provider and tell your agent to set it up:</p>
+      <div class="wallet-pills">
+        <button class="pill active" onclick="selectWallet(this,'agentcash')">AgentCash</button>
+        <button class="pill" onclick="selectWallet(this,'coinbase')">Coinbase</button>
+        <button class="pill" onclick="selectWallet(this,'tempo')">Tempo</button>
+      </div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-label">Setup Prompt</span>
+          <button class="copy-btn" onclick="copyCode(this,'promptWallet')">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="1"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            copy
+          </button>
+        </div>
+        <div class="code-body" id="promptWallet">Read https://agentcash.io/SKILL.md and set up an AgentCash Wallet. Fund it with USDC.</div>
+      </div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-head">
+      <span class="step-num">2.</span>
+      <h2>Start researching Substacks</h2>
+    </div>
+    <div class="step-body">
+      <p>Once your wallet is set up, give your agent this prompt to begin accessing premium content:</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-label">Prompt</span>
+          <button class="copy-btn" onclick="copyCode(this,'promptResearch')">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="1"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            copy
+          </button>
+        </div>
+        <div class="code-body" id="promptResearch">Fetch the raw https://dripstack.com/SKILL.md (not summarized) and follow the instructions. Use agentcash</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="steps-outer" id="writersSection" style="display:none">
+  <div class="step">
+    <div class="step-head"><span class="step-num">1.</span><h2>Connect your Substack</h2></div>
+    <div class="step-body">
+      <p>Link your existing Substack account to DripStack. No changes to your publishing workflow required.</p>
+      <div class="code-block"><div class="code-header"><span class="code-label">Get started</span></div><div class="code-body">Visit https://dripstack.com/writers/connect</div></div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-head"><span class="step-num">2.</span><h2>Set your price per article</h2></div>
+    <div class="step-body"><p>Decide how much AI agents pay per article read. DripStack handles all USDC microtransactions and deposits to your wallet weekly.</p></div>
+  </div>
+  <div class="step">
+    <div class="step-head"><span class="step-num">3.</span><h2>Get paid passively</h2></div>
+    <div class="step-body"><p>Every time an agent accesses your work, you earn. Real-time dashboard included. No extra work on your side.</p></div>
+  </div>
+</div>
+
+<div class="powered">
+  <p>Powered by MPP on Tempo and x402 on Base</p>
+  <div class="scan-badges">
+    <a class="scan-badge" href="#"><span class="live-dot"></span>mppscan</a>
+    <a class="scan-badge" href="#"><span class="live-dot"></span>x402scan</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="#">home</a><a href="#">about</a><a href="#">contact</a><a href="#">portfolio</a><a href="#">openapi</a><a href="#">skill</a><a href="#">llms</a>
+  </div>
+  <div class="footer-scans">
+    <a class="footer-scan" href="#">mppscan</a>
+    <a class="footer-scan" href="#"> &middot; x402scan</a>
+  </div>
+</footer>
+
+<script>
+  const quotes=[
+    "What's Howard Lindzon's take on AI valuations this quarter?",
+    "Summarize Packy McCormick's latest essay on compounding startups.",
+    "What did Mario Gabriele write about vertical SaaS recently?",
+    "Find Ben Thompson's analysis on Apple's AI strategy.",
+    "What does Not Boring say about the infrastructure play in AI?",
+    "Get me Byrne Hobart's view on the credit cycle right now.",
+    "What's the latest from The Diff on macro headwinds?",
+    "Summarize Doomberg's take on energy markets this month."
+  ];
+  let qi=0;
+  function rotateQuote(){
+    const el=document.getElementById('quoteText');
+    el.style.animation='none';void el.offsetWidth;el.style.animation='fadeIn .4s ease';
+    el.textContent=quotes[qi++%quotes.length];
+  }
+  rotateQuote();setInterval(rotateQuote,3800);
+
+  function switchTab(btn,tab){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('agentsSection').style.display=tab==='agents'?'block':'none';
+    document.getElementById('writersSection').style.display=tab==='writers'?'block':'none';
+  }
+
+  const walletPrompts={
+    agentcash:'Read https://agentcash.io/SKILL.md and set up an AgentCash Wallet. Fund it with USDC.',
+    coinbase:'Set up a Coinbase Developer Platform wallet and fund it with USDC on Base.',
+    tempo:'Set up a Tempo wallet and fund it with USDC to enable MPP payments.'
+  };
+  function selectWallet(btn,key){
+    document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('promptWallet').textContent=walletPrompts[key];
+  }
+
+  function copyCode(btn,id){
+    navigator.clipboard.writeText(document.getElementById(id).textContent.trim()).then(()=>{
+      btn.classList.add('copied');
+      btn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> copied';
+      setTimeout(()=>{
+        btn.classList.remove('copied');
+        btn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="1"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> copy';
+      },2000);
+    });
+  }
+
+  const replies=[
+    "Fetching from premium Substack archives — payment of $0.04 USDC sent to writer. Based on their latest issue:",
+    "Great question. Scanning 3 relevant paid articles now — total cost $0.11 USDC. Here's the synthesis:",
+    "Payment processed via x402 on Base. Here's what that writer argued in their most recent piece:",
+    "Found 2 matching posts. Micropayments sent. Summary:"
+  ];
+  let ri=0;
+  function appendMsg(role,text){
+    const c=document.getElementById('chatMessages');
+    const d=document.createElement('div');d.className='msg '+role;
+    d.innerHTML='<span class="msg-label">'+(role==='user'?'you':'ds')+'</span><div class="msg-bubble">'+text+'</div>';
+    c.appendChild(d);c.scrollTop=c.scrollHeight;
+  }
+  function showTyping(){
+    const c=document.getElementById('chatMessages');
+    const d=document.createElement('div');d.className='msg ai';d.id='typing';
+    d.innerHTML='<span class="msg-label">ds</span><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+    c.appendChild(d);c.scrollTop=c.scrollHeight;
+  }
+  function sendMessage(){
+    const inp=document.getElementById('chatInput');
+    const text=inp.value.trim();if(!text)return;
+    inp.value='';inp.style.height='auto';
+    document.getElementById('sendBtn').disabled=true;
+    appendMsg('user',text);showTyping();
+    setTimeout(()=>{
+      document.getElementById('typing')&&document.getElementById('typing').remove();
+      appendMsg('ai',replies[ri++%replies.length]);
+      document.getElementById('sendBtn').disabled=false;
+    },1500);
+  }
+  function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
+  document.getElementById('chatInput').addEventListener('input',function(){
+    this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px';
+  });
+</script>
+</body>
+</html>
