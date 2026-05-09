@@ -12,9 +12,30 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--black:#0d0d0d;--grey-dark:#3a3a3a;--grey-mid:#888;--grey-light:#d4d4d4;--grey-border:#e2e2e2;--grey-bg:#f7f7f7;--white:#ffffff}
+    :root{--black:#0d0d0d;--grey-dark:#3a3a3a;--grey-mid:#888;--grey-light:#d4d4d4;--grey-border:#e2e2e2;--grey-bg:#f7f7f7;--white:#ffffff;--sol:#9945FF;--sol-light:#f3ecff}
     html{scroll-behavior:smooth}
     body{background:var(--white);color:var(--black);font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+
+    /* ANNOUNCEMENT BANNER */
+    .announce-bar{background:var(--black);color:#fff;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+    .announce-left{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11.5px}
+    .drips-badge{background:var(--sol);color:#fff;padding:3px 10px;font-family:'IBM Plex Mono',monospace;font-size:11px;border-radius:3px;font-weight:500;letter-spacing:.04em}
+    .kickstart-btn{background:var(--sol);color:#fff;padding:6px 14px;font-family:'IBM Plex Mono',monospace;font-size:11px;text-decoration:none;border-radius:3px;letter-spacing:.03em;transition:opacity .15s}
+    .kickstart-btn:hover{opacity:.85}
+
+    /* SOLANA + TWITTER STRIP */
+    .social-strip{display:flex;align-items:stretch;border-bottom:1px solid var(--grey-border);overflow:hidden}
+    .built-sol{display:flex;align-items:center;gap:10px;padding:12px 24px;border-right:1px solid var(--grey-border);background:var(--sol-light);flex-shrink:0}
+    .built-sol-text{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--sol);letter-spacing:.05em;font-weight:500}
+    .twitter-card{display:flex;align-items:center;gap:12px;padding:12px 20px;flex:1;background:var(--white)}
+    .twitter-avatar{width:36px;height:36px;border-radius:50%;background:var(--black);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .twitter-avatar svg{width:18px;height:18px;fill:#fff}
+    .twitter-info{flex:1}
+    .twitter-name{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;color:var(--black)}
+    .twitter-handle{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--grey-mid)}
+    .follow-btn{background:var(--black);color:var(--white);border:none;padding:6px 16px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;cursor:pointer;text-decoration:none;letter-spacing:.03em;transition:background .15s;white-space:nowrap;display:inline-block}
+    .follow-btn:hover{background:var(--grey-dark)}
+
     header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--grey-border);position:sticky;top:0;background:rgba(255,255,255,0.97);backdrop-filter:blur(8px);z-index:100}
     .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
     .logo-icon{width:28px;height:28px;border:1.5px solid var(--black);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:700;flex-shrink:0}
@@ -81,7 +102,8 @@
     .scan-badges{display:flex;gap:8px;flex-wrap:wrap}
     .scan-badge{border:1px solid var(--grey-border);padding:5px 12px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--grey-mid);text-decoration:none;display:flex;align-items:center;gap:6px;transition:all .15s}
     .scan-badge:hover{border-color:var(--black);color:var(--black)}
-    .live-dot{width:5px;height:5px;border-radius:50%;background:var(--black);opacity:.4;animation:blink 2s infinite}
+    .live-dot{width:5px;height:5px;border-radius:50%;background:var(--sol);opacity:.6;animation:blink 2s infinite;display:inline-block}
+    .live-dot-green{width:5px;height:5px;border-radius:50%;background:#7fff7f;animation:blink 2s infinite;display:inline-block}
     @keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
     footer{border-top:1px solid var(--grey-border);padding:20px 24px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
     .footer-links{display:flex;flex-wrap:wrap}
@@ -89,14 +111,15 @@
     .footer-links a:first-child{padding-left:0}
     .footer-links a:last-child{border-right:none}
     .footer-links a:hover{color:var(--black)}
-    .footer-scans{display:flex;gap:8px;flex-wrap:wrap}
-    .footer-scan{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--grey-mid);text-decoration:none;transition:color .15s}
-    .footer-scan:hover{color:var(--black)}
+    .footer-right{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--grey-mid)}
     .fade-up{opacity:0;transform:translateY(14px);animation:fadeUp .5s ease forwards}
     @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
     .d1{animation-delay:.05s}.d2{animation-delay:.15s}.d3{animation-delay:.25s}.d4{animation-delay:.38s}
     @media(max-width:480px){
+      .announce-bar{padding:10px 16px}
       header{padding:14px 16px}
+      .social-strip{flex-direction:column}
+      .built-sol{border-right:none;border-bottom:1px solid var(--grey-border)}
       .hero{padding:40px 16px 28px}
       .chat-outer{padding:36px 16px 40px}
       .steps-outer{padding:0 16px 48px}
@@ -108,6 +131,49 @@
   </style>
 </head>
 <body>
+
+<!-- ANNOUNCEMENT BANNER -->
+<div class="announce-bar">
+  <div class="announce-left">
+    <span class="live-dot-green"></span>
+    <span class="drips-badge">$DRIPS</span>
+    <span>Launchpad market launching soon on KickStart by EasyA</span>
+  </div>
+  <a class="kickstart-btn" href="https://kickstart.easya.io/" target="_blank">View on KickStart →</a>
+</div>
+
+<!-- BUILT ON SOLANA + FOLLOW TWITTER -->
+<div class="social-strip">
+  <div class="built-sol">
+    <svg width="22" height="22" viewBox="0 0 397.7 311.7" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sg1" x1="360.879" y1="351.455" x2="141.213" y2="-69.294" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#9945ff"/><stop offset=".91" stop-color="#14f195"/>
+        </linearGradient>
+        <linearGradient id="sg2" x1="264.929" y1="401.601" x2="45.264" y2="-19.148" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#9945ff"/><stop offset=".91" stop-color="#14f195"/>
+        </linearGradient>
+        <linearGradient id="sg3" x1="312.967" y1="376.688" x2="93.301" y2="-44.061" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#9945ff"/><stop offset=".91" stop-color="#14f195"/>
+        </linearGradient>
+      </defs>
+      <path d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1l62.7-62.7z" fill="url(#sg1)"/>
+      <path d="M64.6 3.8C67.1 1.4 70.4 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1L64.6 3.8z" fill="url(#sg2)"/>
+      <path d="M333.1 120.1c-2.4-2.4-5.7-3.8-9.2-3.8H6.5c-5.8 0-8.7 7-4.6 11.1l62.7 62.7c2.4 2.4 5.7 3.8 9.2 3.8h317.4c5.8 0 8.7-7 4.6-11.1l-62.7-62.7z" fill="url(#sg3)"/>
+    </svg>
+    <span class="built-sol-text">Built on Solana</span>
+  </div>
+  <div class="twitter-card">
+    <div class="twitter-avatar">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.631 5.905-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </div>
+    <div class="twitter-info">
+      <div class="twitter-name">DripStack</div>
+      <div class="twitter-handle">@dripstackspace</div>
+    </div>
+    <a class="follow-btn" href="https://x.com/dripstackspace" target="_blank">Follow</a>
+  </div>
+</div>
 
 <header>
   <a class="logo" href="#">
@@ -136,7 +202,7 @@
 
 <div class="chat-outer fade-up d4" id="chat">
   <h2 class="chat-heading">Ask premium financial writers anything. <em>We'll find the answer and pay the source.</em></h2>
-  <p class="chat-sub">Powered by MPP on Tempo and x402 on Base</p>
+  <p class="chat-sub">Powered by MPP on Tempo — settled on Solana</p>
   <div class="chat-box">
     <div class="chat-messages" id="chatMessages">
       <div class="msg ai">
@@ -160,10 +226,10 @@
       <h2>Set up and fund a wallet</h2>
     </div>
     <div class="step-body">
-      <p>Your agent needs a crypto wallet funded with USDC to pay for paid article access. Choose a wallet provider and tell your agent to set it up:</p>
+      <p>Your agent needs a Solana wallet funded with USDC to pay for paid article access. Choose a wallet provider and tell your agent to set it up:</p>
       <div class="wallet-pills">
         <button class="pill active" onclick="selectWallet(this,'agentcash')">AgentCash</button>
-        <button class="pill" onclick="selectWallet(this,'coinbase')">Coinbase</button>
+        <button class="pill" onclick="selectWallet(this,'phantom')">Phantom</button>
         <button class="pill" onclick="selectWallet(this,'tempo')">Tempo</button>
       </div>
       <div class="code-block">
@@ -174,7 +240,7 @@
             copy
           </button>
         </div>
-        <div class="code-body" id="promptWallet">Read https://agentcash.io/SKILL.md and set up an AgentCash Wallet. Fund it with USDC.</div>
+        <div class="code-body" id="promptWallet">Read https://agentcash.io/SKILL.md and set up an AgentCash Wallet on Solana. Fund it with USDC.</div>
       </div>
     </div>
   </div>
@@ -209,7 +275,7 @@
   </div>
   <div class="step">
     <div class="step-head"><span class="step-num">2.</span><h2>Set your price per article</h2></div>
-    <div class="step-body"><p>Decide how much AI agents pay per article read. DripStack handles all USDC microtransactions and deposits to your wallet weekly.</p></div>
+    <div class="step-body"><p>Decide how much AI agents pay per article read. DripStack handles all USDC microtransactions on Solana and deposits to your wallet weekly.</p></div>
   </div>
   <div class="step">
     <div class="step-head"><span class="step-num">3.</span><h2>Get paid passively</h2></div>
@@ -218,10 +284,22 @@
 </div>
 
 <div class="powered">
-  <p>Powered by MPP on Tempo and x402 on Base</p>
+  <p>Powered by MPP on Tempo — settled on Solana</p>
   <div class="scan-badges">
+    <a class="scan-badge" href="#">
+      <svg width="13" height="13" viewBox="0 0 397.7 311.7" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="ps1" x1="360" y1="351" x2="141" y2="-69" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#9945ff"/><stop offset=".91" stop-color="#14f195"/>
+          </linearGradient>
+        </defs>
+        <path d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1l62.7-62.7z" fill="url(#ps1)"/>
+        <path d="M64.6 3.8C67.1 1.4 70.4 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1L64.6 3.8z" fill="url(#ps1)"/>
+        <path d="M333.1 120.1c-2.4-2.4-5.7-3.8-9.2-3.8H6.5c-5.8 0-8.7 7-4.6 11.1l62.7 62.7c2.4 2.4 5.7 3.8 9.2 3.8h317.4c5.8 0 8.7-7 4.6-11.1l-62.7-62.7z" fill="url(#ps1)"/>
+      </svg>
+      solscan
+    </a>
     <a class="scan-badge" href="#"><span class="live-dot"></span>mppscan</a>
-    <a class="scan-badge" href="#"><span class="live-dot"></span>x402scan</a>
   </div>
 </div>
 
@@ -229,10 +307,7 @@
   <div class="footer-links">
     <a href="#">home</a><a href="#">about</a><a href="#">contact</a><a href="#">portfolio</a><a href="#">openapi</a><a href="#">skill</a><a href="#">llms</a>
   </div>
-  <div class="footer-scans">
-    <a class="footer-scan" href="#">mppscan</a>
-    <a class="footer-scan" href="#"> &middot; x402scan</a>
-  </div>
+  <div class="footer-right">built on solana</div>
 </footer>
 
 <script>
@@ -262,9 +337,9 @@
   }
 
   const walletPrompts={
-    agentcash:'Read https://agentcash.io/SKILL.md and set up an AgentCash Wallet. Fund it with USDC.',
-    coinbase:'Set up a Coinbase Developer Platform wallet and fund it with USDC on Base.',
-    tempo:'Set up a Tempo wallet and fund it with USDC to enable MPP payments.'
+    agentcash:'Read https://agentcash.io/SKILL.md and set up an AgentCash Wallet on Solana. Fund it with USDC.',
+    phantom:'Set up a Phantom wallet on Solana and fund it with USDC.',
+    tempo:'Set up a Tempo wallet on Solana and fund it with USDC to enable MPP payments.'
   };
   function selectWallet(btn,key){
     document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
@@ -284,9 +359,9 @@
   }
 
   const replies=[
-    "Fetching from premium Substack archives — payment of $0.04 USDC sent to writer. Based on their latest issue:",
+    "Fetching from premium Substack archives — payment of $0.04 USDC sent to writer on Solana. Based on their latest issue:",
     "Great question. Scanning 3 relevant paid articles now — total cost $0.11 USDC. Here's the synthesis:",
-    "Payment processed via x402 on Base. Here's what that writer argued in their most recent piece:",
+    "Payment processed via MPP on Solana. Here's what that writer argued in their most recent piece:",
     "Found 2 matching posts. Micropayments sent. Summary:"
   ];
   let ri=0;
