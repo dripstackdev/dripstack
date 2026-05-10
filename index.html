@@ -16,6 +16,13 @@
     html{scroll-behavior:smooth}
     body{background:var(--white);color:var(--black);font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden}
 
+    /* ANNOUNCEMENT BANNER */
+    .announce-bar{background:var(--black);color:#fff;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+    .announce-left{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11.5px}
+    .drips-badge{background:var(--sol);color:#fff;padding:3px 10px;font-family:'IBM Plex Mono',monospace;font-size:11px;border-radius:3px;font-weight:500;letter-spacing:.04em}
+    .orynth-badge-wrap{display:flex;align-items:center}
+    .orynth-badge-wrap img{display:block;height:32px;width:auto}
+
     /* SOLANA + TWITTER STRIP */
     .social-strip{display:flex;align-items:stretch;border-bottom:1px solid var(--grey-border);overflow:hidden}
     .built-sol{display:flex;align-items:center;gap:10px;padding:12px 24px;border-right:1px solid var(--grey-border);background:var(--sol-light);flex-shrink:0}
@@ -98,6 +105,28 @@
     .live-dot{width:5px;height:5px;border-radius:50%;background:var(--sol);opacity:.6;animation:blink 2s infinite;display:inline-block}
     .live-dot-green{width:5px;height:5px;border-radius:50%;background:#7fff7f;animation:blink 2s infinite;display:inline-block}
     @keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
+    /* ROADMAP */
+    .roadmap-outer{padding:48px 24px 56px;border-top:1px solid var(--grey-border);max-width:720px}
+    .roadmap-header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:24px}
+    .roadmap-title{font-family:'Playfair Display',serif;font-weight:600;font-size:22px;letter-spacing:-.3px}
+    .roadmap-orynth{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--grey-mid);text-decoration:none;letter-spacing:.04em;transition:color .15s}
+    .roadmap-orynth:hover{color:var(--black)}
+    .roadmap-orynth span{border-bottom:1px solid var(--grey-border)}
+    .roadmap-list{display:flex;flex-direction:column;gap:0}
+    .roadmap-item{display:flex;align-items:flex-start;gap:16px;padding:14px 0;border-top:1px solid var(--grey-border)}
+    .roadmap-item:last-child{border-bottom:1px solid var(--grey-border)}
+    .roadmap-status{flex-shrink:0;margin-top:3px}
+    .status-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+    .status-done{background:#14f195}
+    .status-active{background:var(--sol);animation:blink 2s infinite}
+    .status-soon{background:var(--grey-light)}
+    .roadmap-info{flex:1}
+    .roadmap-item-title{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:500;color:var(--black);margin-bottom:3px}
+    .roadmap-item-desc{font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--grey-mid);line-height:1.5}
+    .roadmap-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--grey-mid);border:1px solid var(--grey-border);padding:2px 7px;border-radius:2px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+    .roadmap-tag.tag-done{color:#14f195;border-color:#14f195}
+    .roadmap-tag.tag-active{color:var(--sol);border-color:var(--sol)}
+
     footer{border-top:1px solid var(--grey-border);padding:20px 24px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
     .footer-links{display:flex;flex-wrap:wrap}
     .footer-links a{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--grey-mid);text-decoration:none;padding:2px 12px;border-right:1px solid var(--grey-border);transition:color .15s}
@@ -123,6 +152,20 @@
   </style>
 </head>
 <body>
+
+<!-- ANNOUNCEMENT BANNER -->
+<div class="announce-bar">
+  <div class="announce-left">
+    <span class="live-dot-green"></span>
+    <span class="drips-badge">$DRIPS</span>
+    <span>launching di orynth.dev</span>
+  </div>
+  <div class="orynth-badge-wrap">
+    <a href="https://orynth.dev/projects/dripstack" target="_blank" rel="noopener">
+      <img src="https://orynth.dev/api/badge/dripstack?theme=dark&style=default" alt="Featured on Orynth" width="260" height="80" />
+    </a>
+  </div>
+</div>
 
 <!-- BUILT ON SOLANA + FOLLOW TWITTER -->
 <div class="social-strip">
@@ -285,9 +328,61 @@
   </div>
 </div>
 
+<!-- ROADMAP -->
+<div class="roadmap-outer" id="roadmap">
+  <div class="roadmap-header">
+    <span class="roadmap-title">Roadmap</span>
+    <a class="roadmap-orynth" href="https://orynth.dev/projects/dripstack" target="_blank" rel="noopener">
+      Updated on <span>orynth.dev →</span>
+    </a>
+  </div>
+  <div class="roadmap-list">
+    <div class="roadmap-item">
+      <div class="roadmap-status"><span class="status-dot status-done"></span></div>
+      <div class="roadmap-info">
+        <div class="roadmap-item-title">MPP on Tempo integration</div>
+        <div class="roadmap-item-desc">Trustless micropayment settlement on Solana (~400ms) for per-article access.</div>
+      </div>
+      <span class="roadmap-tag tag-done">done</span>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-status"><span class="status-dot status-done"></span></div>
+      <div class="roadmap-info">
+        <div class="roadmap-item-title">AI agent SKILL.md + OpenAPI spec</div>
+        <div class="roadmap-item-desc">Standardized agent integration guide and machine-readable API contract.</div>
+      </div>
+      <span class="roadmap-tag tag-done">done</span>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-status"><span class="status-dot status-active"></span></div>
+      <div class="roadmap-info">
+        <div class="roadmap-item-title">$DRIPS token launchpad — orynth.dev</div>
+        <div class="roadmap-item-desc">$DRIPS launching on orynth.dev. Stake to earn a share of protocol revenue.</div>
+      </div>
+      <span class="roadmap-tag tag-active">in progress</span>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-status"><span class="status-dot status-soon"></span></div>
+      <div class="roadmap-info">
+        <div class="roadmap-item-title">Writer dashboard</div>
+        <div class="roadmap-item-desc">Real-time earnings dashboard, per-article analytics, and USDC payout history.</div>
+      </div>
+      <span class="roadmap-tag">soon</span>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-status"><span class="status-dot status-soon"></span></div>
+      <div class="roadmap-info">
+        <div class="roadmap-item-title">Agent wallet top-up & auto-refill</div>
+        <div class="roadmap-item-desc">Automatic USDC refill so agents never hit a funding wall mid-research session.</div>
+      </div>
+      <span class="roadmap-tag">soon</span>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="footer-links">
-    <a href="#">home</a><a href="#">about</a><a href="#">contact</a><a href="#">portfolio</a><a href="#">openapi</a><a href="#">skill</a><a href="#">llms</a>
+    <a href="#">home</a><a href="#">about</a><a href="#">contact</a><a href="#">portfolio</a><a href="#roadmap">roadmap</a><a href="#">openapi</a><a href="#">skill</a><a href="#">llms</a>
   </div>
   <div class="footer-right">built on solana</div>
 </footer>
